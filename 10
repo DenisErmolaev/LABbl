@@ -1,0 +1,34 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления ускорения свободного падения g на высоте h
+double calculateGravity(double h) {
+    // Гравитационная постоянная
+    const double G = 6.672e-11;
+    // Масса Земли
+    const double M = 5.96e24;
+    // Радиус Земли
+    const double R = 6.37e6;
+
+    // Вычисляем ускорение свободного падения
+    double g = G * M / pow(R + h, 2);
+    return g;
+}
+
+int main() {
+    double h;
+
+    // Ввод высоты пользователем
+    cout << "Введите высоту h над поверхностью Земли: ";
+    cin >> h;
+
+    // Вычисление ускорения свободного падения
+    double g = calculateGravity(h);
+
+    // Вывод результата
+    cout << "Ускорение свободного падения на высоте " << h << " м равно " << g << " м/с^2" << endl;
+
+    return 0;
+}
