@@ -1,0 +1,53 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления вертикальной координаты тела в момент времени t
+double verticalPosition(double V, double alpha, double t) {
+    const double g = 9.81; // Ускорение свободного падения
+    return V * sin(alpha) * t - 0.5 * g * t * t;
+}
+
+// Функция для вычисления горизонтальной координаты тела в момент времени t
+double horizontalPosition(double V, double alpha, double t) {
+    return V * cos(alpha) * t;
+}
+
+// Метод секущих для нахождения времени полета T
+double secantMethod(double V, double alpha, double t0, double t1, double epsilon) {
+    double t2;
+    while (abs(verticalPosition(V, alpha, t1)) > epsilon) {
+        t2 = t1 - (verticalPosition(V, alpha, t1) * (t1 - t0)) / (verticalPosition(V, alpha, t1) - verticalPosition(V, alpha, t0));
+        t0 = t1;
+        t1 = t2;
+    }
+    return t1;
+}
+
+int main() {
+    double V, alpha;
+
+    // Ввод начальной скорости и угла броска пользователем
+    cout << "Введите начальную скорость V: ";
+    cin >> V;
+    cout << "Введите угол броска alpha (в радианах): ";
+    cin >> alpha;
+
+    // Начальные приближения для метода секущих
+    double t0 = 0;
+    double t1 = (2 * V * sin(alpha)) / 9.81; // Примерное время полета
+    double epsilon = 1e-6;
+
+    // Нахождение времени полета T с использованием метода секущих
+    double T = secantMethod(V, alpha, t0, t1, epsilon);
+
+    // Вычисление расстояния до края обрыва
+    double phi_alpha = horizontalPosition(V, alpha, T);
+
+    // Вывод результата
+    cout << "Время полета T: " << T << " с" << endl;
+    cout << "Расстояние до края обрыва phi(alpha): " << phi_alpha << " м" << endl;
+
+    return 0;
+}
