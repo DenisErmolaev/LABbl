@@ -1,0 +1,31 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления времени T, когда отклонение маятника максимально
+double findMaxDeviationTime(double omega, double k) {
+    // Вычисляем начальную фазу phi0
+    double phi0 = asin(1.0 / k);
+    // Вычисляем время T, когда отклонение максимально
+    double T = (M_PI / 2.0 - phi0) / omega;
+    return T;
+}
+
+int main() {
+    double omega, k;
+
+    // Ввод параметров пользователем
+    cout << "Введите частоту omega: ";
+    cin >> omega;
+    cout << "Введите коэффициент k: ";
+    cin >> k;
+
+    // Вычисление времени T
+    double T = findMaxDeviationTime(omega, k);
+
+    // Вывод результата
+    cout << "Максимальное отклонение маятника происходит в момент времени T = " << T << endl;
+
+    return 0;
+}
