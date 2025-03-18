@@ -1,0 +1,50 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления расстояния S до объекта
+double calculateDistance(double H, double U, double T) {
+    return sqrt(pow(H, 2) + pow(U * T, 2));
+}
+
+// Метод дихотомии для нахождения времени T, когда самолет достигает объекта
+double dichotomie(double H, double U, double a, double b, double epsilon) {
+    double c;
+    while ((b - a) / 2 > epsilon) {
+        c = (a + b) / 2;
+        if (calculateDistance(H, U, c) * calculateDistance(H, U, a) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+    }
+    return (a + b) / 2;
+}
+
+int main() {
+    double H, U;
+
+    // Ввод высоты и скорости пользователем
+    cout << "Введите высоту H: ";
+    cin >> H;
+    cout << "Введите скорость U: ";
+    cin >> U;
+
+    // Определение интервала [a, b] для метода дихотомии
+    double a = 0;
+    double b = 1000; // Примерное максимальное время
+    double epsilon = 1e-6;
+
+    // Нахождение времени T с использованием метода дихотомии
+    double T = dichotomie(H, U, a, b, epsilon);
+
+    // Вычисление расстояния S до объекта
+    double S = calculateDistance(H, U, T);
+
+    // Вывод результата
+    cout << "Время T, когда самолет достигает объекта: " << T << " с" << endl;
+    cout << "Расстояние S до объекта: " << S << " м" << endl;
+
+    return 0;
+}
