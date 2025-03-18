@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Функция для вычисления максимальной высоты H
+double calculateMaxHeight(double V, double alpha) {
+    const double g = 9.81; // Ускорение свободного падения
+    return (V * V * pow(sin(alpha), 2)) / (2 * g);
+}
+
+// Функция для вычисления времени полета T
+double calculateFlightTime(double V, double alpha) {
+    const double g = 9.81;
+    return (2 * V * sin(alpha)) / g;
+}
+
+// Метод итераций для нахождения времени полета T
+double iterationMethod(double V, double alpha, double epsilon) {
+    double T_prev = 0;
+    double T = (2 * V * sin(alpha)) / 9.81; // Начальное приближение
+
+    while (abs(T - T_prev) > epsilon) {
+        T_prev = T;
+        T = (2 * V * sin(alpha)) / 9.81; // Обновляем значение T
+    }
+
+    return T;
+}
+
+int main() {
+    double V, alpha;
+
+    // Ввод начальной скорости и угла броска пользователем
+    cout << "Введите начальную скорость V: ";
+    cin >> V;
+    cout << "Введите угол броска alpha (в радианах): ";
+    cin >> alpha;
+
+    // Вычисление максимальной высоты H
+    double H = calculateMaxHeight(V, alpha);
+
+    // Точность для метода итераций
+    double epsilon = 1e-6;
+
+    // Нахождение времени полета T с использованием метода итераций
+    double T = iterationMethod(V, alpha, epsilon);
+
+    // Вывод результата
+    cout << "Максимальная высота полета H: " << H << " м" << endl;
+    cout << "Время полета T: " << T << " с" << endl;
+
+    return 0;
+}
