@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+// Подынтегральная функция: x^n * ln(x)
+double f(double x, int n) {
+    if (x == 0) {
+        // При x -> 0+, x^n * ln(x) -> 0 для n > 0
+        return 0.0;
+    }
+    return pow(x, n) * log(x);
+}
+// Метод Симпсона для вычисления интеграла от a до b с заданной точностью
+double simpson_integral(double a, double b, int n, double eps) {
+    int otrezki = 2; // Начальное количество отрезков
+    double integral_prev = 0.0;
+    double integral_current = 0.0;
+    double error = eps + 1.0; // Инициализация ошибки
+    while (error > eps) {
+        double h = (b - a) / otrezki;
+        integral_current = 0.0;
+        // Суммирование по отрезкам
+        for (int i = 0; i < otrezki; i++) {
+            double x0 = a + i * h;
+            double x1 = x0 + h / 2;
+            double x2 = x0 + h;
+            // Проверка на особые точки
+            if (x0 == 0) x0 = 1e-15;
+            if (x1 == 0) x1 = 1e-15;
+            if (x2 == 0) x2 = 1e-15;
+            // Формула Симпсона для текущего отрезка
+            integral_current += (f(x0, n) + 4 * f(x1, n) + f(x2, n)) * h / 6;
+        }
+        // Оценка погрешности
+        if (otrezki > 2) {
+            error = fabs(integral_current - integral_prev) / 15.0; // Правило Рунге
+        }
+
+        integral_prev = integral_current;
+        otrezki *= 2; // Удвоение количества отрезков для следующей итерации
+    }
+    return integral_current;
+}
+
+int main() {
+    int n;
+    double a = 0.0, b = 1.0;
+    double eps = 1e-6;
+    cout << "Введите значение n: ";
+    cin >> n;
+    double result = simpson_integral(a, b, n, eps);
+    cout << fixed << setprecision(10);
+    cout << "Значение интеграла: " << result << endl;
+    return 0;
+}
